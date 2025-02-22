@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from posts.views import PostListCreateView, CommentCreateView, LikeCreateView, post_list, post_create
 from django.conf import settings
 from django.conf.urls.static import static
@@ -25,7 +26,11 @@ urlpatterns = [
     path('api/posts/<int:post_id>/like/', LikeCreateView.as_view(), name='post-like'),
     path('', post_list, name='post-list'),
     path('create/', post_create, name='post-create'),
+
+    # Авторизация
+    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
 
+# Добавляем поддержку медиа-файлов
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
